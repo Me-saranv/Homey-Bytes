@@ -3,11 +3,27 @@
 const ADMIN_PASSWORD = 'admin@2024';
 
 function initAdmin() {
-    console.log('Initializing admin dashboard');
-    loadProducts(); // Load products first
-    renderProductsList(); // Render the list
-    loadDashboard(); // Show dashboard stats
-    loadOrders(); // Load orders
+    console.log('🚀 initAdmin() - Starting admin initialization');
+    
+    // Load products FIRST
+    if (typeof loadProducts === 'function') {
+        console.log('📥 Calling loadProducts()');
+        loadProducts();
+    }
+    
+    // Then render the list
+    if (typeof renderProductsList === 'function') {
+        console.log('🎨 Calling renderProductsList()');
+        renderProductsList();
+    }
+    
+    // Then load dashboard
+    loadDashboard();
+    
+    // Then load orders
+    loadOrders();
+    
+    console.log('✅ Admin initialization complete');
 }
 
 function showLogin() {
@@ -34,15 +50,15 @@ function loginAdmin() {
 }
 
 function switchToAdmin() {
+    console.log('🔄 Switching to admin view');
     const customerSite = document.getElementById('customerSite');
     const adminSite = document.getElementById('adminSite');
     
     if (customerSite) customerSite.style.display = 'none';
     if (adminSite) adminSite.classList.add('show');
     
+    console.log('📱 Admin site shown');
     initProducts();
-    loadDashboard();
-    loadOrders();
 }
 
 function logoutAdmin() {
@@ -59,43 +75,65 @@ function logoutAdmin() {
 }
 
 function switchTab(tabId) {
+    console.log('📑 Switching to tab:', tabId);
+    
     // Hide all sections
     document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
     
     // Show selected section
     const section = document.getElementById(tabId);
-    if (section) section.classList.add('active');
+    if (section) {
+        section.classList.add('active');
+        console.log('✅ Section shown:', tabId);
+    }
     
     if (event.target) event.target.classList.add('active');
 
     // Load content based on tab
     if (tabId === 'products') {
-        console.log('Loading products tab');
-        loadProducts(); // Load from localStorage
-        renderProductsList(); // Display the list
+        console.log('📦 Loading products tab');
+        if (typeof loadProducts === 'function') {
+            loadProducts();
+        }
+        if (typeof renderProductsList === 'function') {
+            renderProductsList();
+        }
     }
     if (tabId === 'orders') {
-        console.log('Loading orders tab');
+        console.log('📬 Loading orders tab');
         loadOrders();
     }
     if (tabId === 'dashboard') {
-        console.log('Loading dashboard');
+        console.log('📊 Loading dashboard');
         loadDashboard();
     }
 }
 
 function loadDashboard() {
-    document.getElementById('totalProducts').textContent = products.length;
+    console.log('📊 Loading dashboard stats');
+    const totalProducts = document.getElementById('totalProducts');
+    const totalOrders = document.getElementById('totalOrders');
+    
+    if (totalProducts) {
+        totalProducts.textContent = products.length;
+    }
+    
     const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-    document.getElementById('totalOrders').textContent = orders.length;
+    if (totalOrders) {
+        totalOrders.textContent = orders.length;
+    }
 }
 
 function loadOrders() {
+    console.log('📬 Loading orders');
     const orders = JSON.parse(localStorage.getItem('orders') || '[]');
     const ordersList = document.getElementById('ordersList');
     
-    if (!ordersList) return;
+    if (!ordersList) {
+        console.error('❌ ordersList element not found');
+        return;
+    }
 
     if (orders.length === 0) {
         ordersList.innerHTML = `
@@ -113,7 +151,7 @@ function loadOrders() {
                     <tbody>
                         <tr>
                             <td colspan="5" style="text-align: center; color: #999; padding: 2rem;">
-                                No orders yet
+                                ℹ️ No orders yet
                             </td>
                         </tr>
                     </tbody>
