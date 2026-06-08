@@ -309,6 +309,17 @@
             line-height: 1.6;
         }
 
+        .veg-badge {
+            display: inline-block;
+            background: #27AE60;
+            color: white;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
         .product-footer {
             display: flex;
             justify-content: space-between;
@@ -758,6 +769,7 @@
             display: flex;
             gap: 1rem;
             margin-bottom: 2rem;
+            flex-wrap: wrap;
         }
 
         .btn-admin {
@@ -777,6 +789,7 @@
 
         .btn-success:hover {
             opacity: 0.8;
+            transform: translateY(-2px);
         }
 
         .btn-danger {
@@ -786,6 +799,7 @@
 
         .btn-danger:hover {
             opacity: 0.8;
+            transform: translateY(-2px);
         }
 
         .btn-small {
@@ -961,6 +975,14 @@
             .hero-text h1 {
                 font-size: 2.5rem;
             }
+
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-image {
+                font-size: 10rem !important;
+            }
         }
     </style>
 </head>
@@ -1008,13 +1030,13 @@
                 <div class="hero-text">
                     <h1>Homey Bytes</h1>
                     <div class="tagline" id="tagline">Home Made With Love ❤️</div>
-                    <p>Dive into madness of pure home taste. Handcrafted delicacies made with love, tradition, and the finest ingredients.</p>
+                    <p>Authentic vegetarian homemade snacks & sweets. Pure, fresh, and made with traditional recipes.</p>
                     <div class="cta-buttons">
                         <a href="#products" class="btn btn-primary">Explore Products</a>
                         <a href="#contact" class="btn btn-secondary">Order Now</a>
                     </div>
                 </div>
-                <div class="hero-image" style="font-size: 15rem; text-align: center; opacity: 0.9;">🍳</div>
+                <div class="hero-image" style="font-size: 15rem; text-align: center; opacity: 0.9;">🍲</div>
             </div>
         </section>
 
@@ -1026,7 +1048,7 @@
         <section class="contact" id="contact">
             <div class="contact-content">
                 <h2>Ready to Order?</h2>
-                <p>Get fresh, homemade delicacies delivered to your doorstep. Contact us!</p>
+                <p>Get fresh, homemade vegetarian delicacies delivered to your doorstep.</p>
                 <div class="contact-methods">
                     <div class="contact-method">
                         <div>📱 WhatsApp</div>
@@ -1045,7 +1067,7 @@
         </section>
 
         <footer>
-            <p>&copy; 2024 Homey Bytes. All rights reserved. Made with ❤️</p>
+            <p>&copy; 2024 Homey Bytes - Pure Vegetarian. Made with ❤️ in Bengaluru.</p>
         </footer>
     </div>
 
@@ -1054,7 +1076,7 @@
         <div style="position: relative;">
             <div class="admin-login-box">
                 <span class="login-close" onclick="closeAdminLogin()">&times;</span>
-                <h1>🍳 Homey Bytes</h1>
+                <h1>🍲 Homey Bytes</h1>
                 <p>Admin Dashboard</p>
                 <form onsubmit="handleAdminLogin(event)">
                     <div class="form-group">
@@ -1136,30 +1158,30 @@
                     <h2 class="admin-section-title">Product Management</h2>
 
                     <div class="admin-form">
-                        <h3 style="color: var(--primary); margin-bottom: 1.5rem;">➕ Add Product</h3>
+                        <h3 style="color: var(--primary); margin-bottom: 1.5rem;">➕ Add New Product</h3>
                         
                         <div class="form-row full">
                             <div class="form-group">
                                 <label>Product Name *</label>
-                                <input type="text" id="productName" placeholder="e.g., Sweet Shankar Poli" required>
+                                <input type="text" id="productName" placeholder="e.g., Sweet Shankar Poli">
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Price *</label>
-                                <input type="number" id="productPrice" placeholder="₹100" min="0" step="0.01" required>
+                                <input type="number" id="productPrice" placeholder="₹100" min="0" step="0.01">
                             </div>
                             <div class="form-group">
                                 <label>Emoji</label>
-                                <input type="text" id="productEmoji" placeholder="🥟" value="🥘" maxlength="2">
+                                <input type="text" id="productEmoji" placeholder="🥘" value="🥘" maxlength="2">
                             </div>
                         </div>
 
                         <div class="form-row full">
                             <div class="form-group">
                                 <label>Description *</label>
-                                <textarea id="productDesc" placeholder="Describe your product..." required></textarea>
+                                <textarea id="productDesc" placeholder="Describe your product..."></textarea>
                             </div>
                         </div>
 
@@ -1176,8 +1198,8 @@
                         </div>
 
                         <div class="button-group">
-                            <button class="btn-admin btn-success" onclick="addProduct()">Add Product</button>
-                            <button class="btn-admin btn-danger" onclick="resetProductForm()">Clear</button>
+                            <button class="btn-admin btn-success" onclick="addProduct()">➕ Add Product</button>
+                            <button class="btn-admin btn-danger" onclick="resetProductForm()">Clear Form</button>
                         </div>
                     </div>
 
@@ -1190,7 +1212,7 @@
                     <h2 class="admin-section-title">Orders & Messages</h2>
                     
                     <div class="button-group">
-                        <button class="btn-admin btn-danger" onclick="clearAllOrders()">Clear All Orders</button>
+                        <button class="btn-admin btn-danger" onclick="clearAllOrders()">🗑️ Clear All Orders</button>
                     </div>
 
                     <div class="admin-form">
@@ -1219,17 +1241,17 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>WhatsApp Number *</label>
-                                <input type="tel" id="whatsappNumber" placeholder="+91 8056580475" required>
+                                <input type="tel" id="whatsappNumber" placeholder="+91 8056580475">
                             </div>
                             <div class="form-group">
                                 <label>Email *</label>
-                                <input type="email" id="emailAddress" placeholder="your@email.com" required>
+                                <input type="email" id="emailAddress" placeholder="your@email.com">
                             </div>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Phone Number *</label>
-                                <input type="tel" id="phoneNumber" placeholder="+91 8056580475" required>
+                                <input type="tel" id="phoneNumber" placeholder="+91 8056580475">
                             </div>
                         </div>
                     </div>
@@ -1253,15 +1275,15 @@
                     <div class="admin-form">
                         <h3 style="color: var(--primary); margin-bottom: 1.5rem;">💾 Data Management</h3>
                         <div class="button-group">
-                            <button class="btn-admin btn-success" onclick="exportData()">📥 Export</button>
-                            <button class="btn-admin btn-success" onclick="document.getElementById('importFile').click()">📤 Import</button>
+                            <button class="btn-admin btn-success" onclick="exportData()">📥 Export Data</button>
+                            <button class="btn-admin btn-success" onclick="document.getElementById('importFile').click()">📤 Import Data</button>
                             <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importData(event)">
-                            <button class="btn-admin btn-danger" onclick="resetAllData()">🔄 Reset</button>
+                            <button class="btn-admin btn-danger" onclick="resetAllData()">🔄 Reset All</button>
                         </div>
                     </div>
 
                     <div class="button-group">
-                        <button class="btn-admin btn-success" onclick="saveSettings()" style="width: 100%; padding: 1rem; font-size: 1rem;">💾 Save All</button>
+                        <button class="btn-admin btn-success" onclick="saveSettings()" style="width: 100%; padding: 1rem; font-size: 1rem;">💾 Save All Settings</button>
                     </div>
                 </div>
             </div>
@@ -1284,6 +1306,20 @@
         let products = [];
         let currentImageData = null;
         let selectedProductIndex = -1;
+
+        // Default veg products
+        const defaultProducts = [
+            { id: 1, name: 'Ragi Mixture', price: '150', desc: 'Nutritious ragi-based savory mixture with aromatic spices. No preservatives!', emoji: '🌾', image: null },
+            { id: 2, name: 'Sweet Shankar Poli', price: '80', desc: 'Soft, sweet flatbread filled with jaggery and dry fruits. Perfectly made!', emoji: '🥟', image: null },
+            { id: 3, name: 'Khara Shankar Poli', price: '80', desc: 'Spicy version of our signature poli with savory filling. Tasty & fresh!', emoji: '🌯', image: null },
+            { id: 4, name: 'Fried Makhana', price: '120', desc: 'Crispy, roasted fox nuts with light seasoning. Healthy snack option!', emoji: '🍿', image: null },
+            { id: 5, name: 'Potato Chips', price: '100', desc: 'Thinly sliced, golden crispy potato chips. Made fresh daily!', emoji: '🥔', image: null },
+            { id: 6, name: 'Chakli', price: '100', desc: 'Savory spiral delicacy with cumin and chili flavors. Classic taste!', emoji: '🌀', image: null },
+            { id: 7, name: 'Nippattu', price: '95', desc: 'Crispy, seasoned rice wafers with sesame seeds. Traditional recipe!', emoji: '🍚', image: null },
+            { id: 8, name: 'Kodubale', price: '105', desc: 'Crispy lentil-based savory snack with aromatic spices. Crunchy & tasty!', emoji: '🍪', image: null },
+            { id: 9, name: 'Modak', price: '85', desc: 'Sweet rice dumplings filled with jaggery and coconut. Festival special!', emoji: '🥟', image: null },
+            { id: 10, name: 'Holige', price: '75', desc: 'Sweet wheat-based flatbread with jaggery and lentil filling. Pure joy!', emoji: '🥙', image: null }
+        ];
 
         window.addEventListener('load', function() {
             loadAllData();
@@ -1314,7 +1350,7 @@
                 closeAdminLogin();
                 showAdminDashboard();
             } else {
-                showAlert('Invalid password!', 'error');
+                showAlert('❌ Invalid password!', 'error');
                 document.getElementById('adminPassword').value = '';
                 document.getElementById('adminPassword').focus();
             }
@@ -1327,7 +1363,7 @@
         }
 
         function handleLogout() {
-            if (confirm('Logout?')) {
+            if (confirm('Logout from admin?')) {
                 localStorage.removeItem('adminLoggedIn');
                 document.getElementById('adminDashboard').classList.remove('show');
                 document.getElementById('customerSite').style.display = 'block';
@@ -1349,18 +1385,21 @@
 
         function addProduct() {
             const name = document.getElementById('productName').value.trim();
-            const price = document.getElementById('productPrice').value;
+            const price = document.getElementById('productPrice').value.trim();
             const desc = document.getElementById('productDesc').value.trim();
-            const emoji = document.getElementById('productEmoji').value || '🥘';
+            const emoji = document.getElementById('productEmoji').value.trim() || '🥘';
 
             if (!name || !price || !desc) {
-                showAlert('Please fill all required fields', 'error');
+                showAlert('⚠️ Please fill all required fields!', 'error');
                 return;
             }
 
             const product = {
                 id: Date.now(),
-                name, price, desc, emoji,
+                name,
+                price,
+                desc,
+                emoji,
                 image: currentImageData
             };
 
@@ -1369,7 +1408,7 @@
             resetProductForm();
             loadProductsList();
             renderProducts();
-            showAlert('Product added! ✓', 'success');
+            showAlert('✅ Product added successfully!', 'success');
         }
 
         function deleteProduct(id) {
@@ -1378,7 +1417,7 @@
                 localStorage.setItem('products', JSON.stringify(products));
                 loadProductsList();
                 renderProducts();
-                showAlert('Product deleted', 'success');
+                showAlert('✅ Product deleted', 'success');
             }
         }
 
@@ -1395,16 +1434,17 @@
         function loadProductsList() {
             const list = document.getElementById('productsList');
             if (products.length === 0) {
-                list.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">No products yet</p>';
+                list.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999; padding: 2rem;">No products added yet. Click above to add your first product!</p>';
                 return;
             }
 
             list.innerHTML = products.map(p => `
                 <div class="product-item">
-                    ${p.image ? `<img src="${p.image}" class="product-item-image">` : `<div class="product-item-image">${p.emoji}</div>`}
+                    ${p.image ? `<img src="${p.image}" class="product-item-image" alt="${p.name}">` : `<div class="product-item-image">${p.emoji}</div>`}
                     <div class="product-item-info">
                         <div class="product-item-name">${p.name}</div>
                         <div class="product-item-price">₹${p.price}</div>
+                        <div style="font-size: 0.9rem; color: #666; margin-bottom: 1rem;">${p.desc.substring(0, 50)}...</div>
                         <div class="product-item-actions">
                             <button class="btn-admin btn-danger btn-small" onclick="deleteProduct(${p.id})">Delete</button>
                         </div>
@@ -1440,7 +1480,7 @@
             tbody.innerHTML = orders.reverse().map(o => `
                 <tr>
                     <td>${new Date(o.timestamp).toLocaleString()}</td>
-                    <td>${o.product}</td>
+                    <td><strong>${o.product}</strong></td>
                     <td><span class="status-badge">${o.status}</span></td>
                     <td><button class="btn-admin btn-danger btn-small" onclick="deleteOrder(${o.id})">Delete</button></td>
                 </tr>
@@ -1448,22 +1488,20 @@
         }
 
         function deleteOrder(id) {
-            if (confirm('Delete this order?')) {
-                let orders = JSON.parse(localStorage.getItem('orders')) || [];
-                orders = orders.filter(o => o.id !== id);
-                localStorage.setItem('orders', JSON.stringify(orders));
-                loadOrdersList();
-                loadDashboard();
-                showAlert('Order deleted', 'success');
-            }
+            let orders = JSON.parse(localStorage.getItem('orders')) || [];
+            orders = orders.filter(o => o.id !== id);
+            localStorage.setItem('orders', JSON.stringify(orders));
+            loadOrdersList();
+            loadDashboard();
+            showAlert('✅ Order deleted', 'success');
         }
 
         function clearAllOrders() {
-            if (confirm('Delete ALL orders?')) {
+            if (confirm('Delete ALL orders? This cannot be undone!')) {
                 localStorage.removeItem('orders');
                 loadOrdersList();
                 loadDashboard();
-                showAlert('All orders cleared', 'success');
+                showAlert('✅ All orders cleared', 'success');
             }
         }
 
@@ -1481,7 +1519,7 @@
                 tbody.innerHTML = recent.map(o => `
                     <tr>
                         <td>${new Date(o.timestamp).toLocaleTimeString()}</td>
-                        <td>${o.product}</td>
+                        <td><strong>${o.product}</strong></td>
                         <td><span class="status-badge">${o.status}</span></td>
                     </tr>
                 `).join('');
@@ -1500,13 +1538,16 @@
             localStorage.setItem('settings', JSON.stringify(settings));
             loadContactInfo();
             renderProducts();
-            showAlert('Settings saved! ✓', 'success');
+            showAlert('✅ Settings saved!', 'success');
         }
 
         function loadAllData() {
             const savedProducts = JSON.parse(localStorage.getItem('products'));
             if (savedProducts && savedProducts.length > 0) {
                 products = savedProducts;
+            } else {
+                products = [...defaultProducts];
+                localStorage.setItem('products', JSON.stringify(products));
             }
 
             const settings = JSON.parse(localStorage.getItem('settings')) || {};
@@ -1514,7 +1555,9 @@
             document.getElementById('emailAddress').value = settings.emailAddress || 'Lakshsubyam57@gmail.com';
             document.getElementById('phoneNumber').value = settings.phoneNumber || '+91 8056580475';
             document.getElementById('businessTagline').value = settings.businessTagline || 'Home Made With Love ❤️';
-            document.getElementById('businessDesc').value = settings.businessDesc || '';
+            document.getElementById('businessDesc').value = settings.businessDesc || 'Authentic vegetarian homemade snacks & sweets';
+
+            loadProductsList();
         }
 
         function exportData() {
@@ -1531,7 +1574,7 @@
             a.href = url;
             a.download = `homey-bytes-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
-            showAlert('Data exported! ✓', 'success');
+            showAlert('✅ Data exported!', 'success');
         }
 
         function importData(e) {
@@ -1553,19 +1596,20 @@
                     loadProductsList();
                     loadDashboard();
                     renderProducts();
-                    showAlert('Data imported! ✓', 'success');
+                    showAlert('✅ Data imported!', 'success');
                 } catch (err) {
-                    showAlert('Invalid file format', 'error');
+                    showAlert('❌ Invalid file format', 'error');
                 }
             };
             reader.readAsText(file);
         }
 
         function resetAllData() {
-            if (confirm('Delete ALL data?')) {
+            if (confirm('Delete ALL data? This cannot be undone!')) {
                 if (confirm('Last chance - are you absolutely sure?')) {
                     localStorage.clear();
-                    products = [];
+                    products = [...defaultProducts];
+                    localStorage.setItem('products', JSON.stringify(products));
                     location.reload();
                 }
             }
@@ -1582,6 +1626,7 @@
                 <div class="product-card" onclick="openModal(${i})">
                     ${p.image ? `<img src="${p.image}" alt="${p.name}" class="product-image">` : `<div class="product-image">${p.emoji}</div>`}
                     <div class="product-info">
+                        <div class="veg-badge">✓ 100% VEG</div>
                         <div class="product-name">${p.name}</div>
                         <div class="product-desc">${p.desc}</div>
                         <div class="product-footer">
