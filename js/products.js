@@ -5,28 +5,39 @@ let editingProductId = null;
 let currentImage = null;
 
 function initProducts() {
+    console.log('🔄 initProducts called');
     loadProducts();
+    console.log('📦 Products loaded:', products.length);
     renderProductsList();
+    console.log('✅ Products rendered');
 }
 
 function loadProducts() {
     const saved = localStorage.getItem('products');
+    console.log('📂 Checking localStorage for products...');
+    
     if (saved) {
         try {
             products = JSON.parse(saved);
+            console.log('✅ Products loaded from localStorage:', products.length);
         } catch (e) {
-            console.error('Error loading products:', e);
-            products = [];
+            console.error('❌ Error parsing products:', e);
+            products = getDefaultProducts();
         }
     } else {
-        products = [
-            { id: 1, name: 'Ragi Mixture', price: 150, desc: 'Nutritious ragi-based savory mixture with aromatic spices', emoji: '🌾', category: 'Mixture', image: null },
-            { id: 2, name: 'Sweet Shankar Poli', price: 80, desc: 'Soft sweet flatbread filled with jaggery and dry fruits', emoji: '🥟', category: 'Sweet', image: null },
-            { id: 3, name: 'Chakli', price: 100, desc: 'Savory spiral snack with cumin and chili flavors', emoji: '🌀', category: 'Savory', image: null },
-            { id: 4, name: 'Fried Makhana', price: 120, desc: 'Crispy roasted fox nuts with light seasoning', emoji: '🍿', category: 'Snack', image: null },
-        ];
+        console.log('📥 No products in localStorage, using defaults');
+        products = getDefaultProducts();
         saveProducts();
     }
+}
+
+function getDefaultProducts() {
+    return [
+        { id: 1, name: 'Ragi Mixture', price: 150, desc: 'Nutritious ragi-based savory mixture with aromatic spices', emoji: '🌾', category: 'Mixture', image: null },
+        { id: 2, name: 'Sweet Shankar Poli', price: 80, desc: 'Soft sweet flatbread filled with jaggery and dry fruits', emoji: '🥟', category: 'Sweet', image: null },
+        { id: 3, name: 'Chakli', price: 100, desc: 'Savory spiral snack with cumin and chili flavors', emoji: '🌀', category: 'Savory', image: null },
+        { id: 4, name: 'Fried Makhana', price: 120, desc: 'Crispy roasted fox nuts with light seasoning', emoji: '🍿', category: 'Snack', image: null },
+    ];
 }
 
 function saveProducts() {
@@ -96,7 +107,7 @@ function addProduct() {
 
     saveProducts();
     clearProductForm();
-    renderProductsList();
+    setTimeout(() => renderProductsList(), 100);
 }
 
 function editProduct(id) {
@@ -126,7 +137,7 @@ function deleteProduct(id) {
     if (confirm(`🗑️ Delete "${product.name}"? This cannot be undone!`)) {
         products = products.filter(p => p.id !== id);
         saveProducts();
-        renderProductsList();
+        setTimeout(() => renderProductsList(), 100);
         showAlert(`🗑️ Product "${product.name}" DELETED & REMOVED FROM GITHUB!`, 'success');
     }
 }
@@ -146,31 +157,24 @@ function clearProductForm() {
 }
 
 function renderProductsList() {
+    console.log('🔄 renderProductsList called');
     const list = document.getElementById('productsList');
+    
     if (!list) {
-        console.log('productsList element not found');
+        console.error('❌ productsList element NOT FOUND!');
         return;
     }
-
-    // Load latest products from localStorage
-    const saved = localStorage.getItem('products');
-    if (saved) {
-        try {
-            products = JSON.parse(saved);
-        } catch (e) {
-            console.error('Error parsing products:', e);
-            products = [];
-        }
-    }
     
-    console.log('Rendering products. Count:', products.length);
+    console.log('✅ productsList element found');
+    console.log('📊 Products to render:', products.length);
     
     if (!products || products.length === 0) {
+        console.log('ℹ️ No products to display');
         list.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: #999; padding: 3rem; background: white; border-radius: 10px; margin-top: 1rem;"><p style="font-size: 1.2rem;">📦 No products yet</p><p style="font-size: 0.9rem; margin-top: 0.5rem; color: #999;">Click "➕ Add Product" to create your first snack!</p></div>';
         return;
     }
 
-    list.innerHTML = products.map(p => `
+    const html = products.map(p => `
         <div class="product-card-admin" style="border: 2px solid var(--light-purple); transition: all 0.3s;">
             <div class="product-card-admin-img">
                 ${p.image ? `<img src="${p.image}" alt="${p.name}">` : p.emoji}
@@ -190,6 +194,9 @@ function renderProductsList() {
             </div>
         </div>
     `).join('');
+    
+    list.innerHTML = html;
+    console.log('✅ Products rendered successfully');
 }
 
 function updateProductsOnWebsite() {
