@@ -5,327 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Homey Bytes - Pure Vegetarian Snacks</title>
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --primary: #8B4A6F;
-            --secondary: #C85A6F;
-            --cream: #FFF8F0;
-            --light-purple: #E8D5E0;
-            --dark-text: #3D2A3E;
-            --success: #27AE60;
-            --danger: #E74C3C;
-        }
-        body { font-family: 'Lato', sans-serif; color: var(--dark-text); background: #f5f5f5; }
-
-        /* CUSTOMER SITE */
-        .customer-site { display: block; }
-        .admin-site { display: none; }
-        
-        header {
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            background: rgba(255, 248, 240, 0.95);
-            backdrop-filter: blur(10px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 1rem 2rem;
-        }
-
-        nav {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo-text { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--primary); font-weight: 700; }
-        .nav-links { display: flex; gap: 2rem; list-style: none; }
-        .nav-links a { text-decoration: none; color: var(--dark-text); font-weight: 500; }
-        .admin-link { font-size: 1.3rem; cursor: pointer; }
-
-        .hero {
-            margin-top: 80px;
-            min-height: 80vh;
-            display: flex;
-            align-items: center;
-            padding: 2rem;
-            background: linear-gradient(135deg, var(--cream) 0%, rgba(232, 213, 224, 0.3) 100%);
-        }
-
-        .hero-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-
-        .hero-text h1 { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--primary); margin-bottom: 1rem; }
-        .hero-text .tagline { font-family: 'Caveat', cursive; font-size: 1.8rem; color: var(--secondary); margin-bottom: 1rem; }
-        .hero-text p { font-size: 1.05rem; line-height: 1.8; margin-bottom: 2rem; }
-
-        .btn {
-            padding: 0.8rem 1.5rem;
-            border: none;
-            border-radius: 30px;
-            font-weight: 600;
-            cursor: pointer;
-            text-decoration: none;
-            transition: all 0.3s;
-            display: inline-block;
-        }
-
-        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; }
-        .btn-primary:hover { transform: translateY(-2px); }
-        .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
-
-        .products {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 2rem;
-        }
-
-        .section-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
-            text-align: center;
-            color: var(--primary);
-            margin-bottom: 3rem;
-            border-bottom: 3px solid var(--secondary);
-            padding-bottom: 1rem;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-        }
-
-        .product-card {
-            background: white;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.15); }
-
-        .product-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, var(--light-purple), rgba(232,213,224,0.5));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 4rem;
-        }
-
-        .product-image img { width: 100%; height: 100%; object-fit: cover; }
-
-        .product-info { padding: 1.5rem; }
-        .veg-badge { display: inline-block; background: var(--success); color: white; padding: 0.3rem 0.6rem; border-radius: 4px; font-size: 0.75rem; font-weight: 600; margin-bottom: 0.5rem; }
-        .product-name { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--primary); margin-bottom: 0.5rem; }
-        .product-desc { font-size: 0.9rem; color: #666; margin-bottom: 1rem; line-height: 1.5; }
-        .product-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee; padding-top: 1rem; }
-        .product-price { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--secondary); font-weight: 700; }
-        .order-btn { background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; padding: 0.5rem 1rem; border-radius: 20px; cursor: pointer; font-weight: 600; }
-
-        .contact {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 3rem 2rem;
-            margin-top: 4rem;
-            text-align: center;
-        }
-
-        .contact-content { max-width: 800px; margin: 0 auto; }
-        .contact h2 { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 1rem; }
-        .contact-methods { display: flex; gap: 2rem; flex-wrap: wrap; justify-content: center; margin-top: 2rem; }
-        .contact-method { background: rgba(255,255,255,0.1); padding: 1.5rem; border-radius: 10px; flex: 1; min-width: 150px; }
-        .contact-method a { color: white; text-decoration: none; font-weight: 600; }
-
-        footer { background: var(--dark-text); color: white; text-align: center; padding: 2rem; }
-
-        /* ADMIN STYLES */
-        .admin-header {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            color: white;
-            padding: 1.5rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .admin-wrapper { display: flex; gap: 0; min-height: calc(100vh - 70px); }
-        .admin-sidebar { width: 200px; background: white; padding: 1.5rem 0; box-shadow: 2px 0 5px rgba(0,0,0,0.05); overflow-y: auto; }
-        .sidebar-item { padding: 1rem 1.5rem; cursor: pointer; border-left: 4px solid transparent; transition: all 0.3s; font-weight: 500; }
-        .sidebar-item:hover { background: var(--cream); color: var(--primary); }
-        .sidebar-item.active { background: var(--light-purple); border-left-color: var(--primary); color: var(--primary); }
-
-        .admin-main { flex: 1; padding: 2rem; overflow-y: auto; }
-        .admin-section { display: none; }
-        .admin-section.active { display: block; }
-
-        .section-title2 { font-family: 'Playfair Display', serif; font-size: 2rem; color: var(--primary); margin-bottom: 2rem; border-bottom: 3px solid var(--secondary); padding-bottom: 1rem; }
-
-        .form-box {
-            background: white;
-            padding: 2rem;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            margin-bottom: 2rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 600;
-            color: var(--dark-text);
-        }
-
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #ddd;
-            border-radius: 5px;
-            font-family: 'Lato', sans-serif;
-            font-size: 1rem;
-            transition: border-color 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: var(--primary);
-            background: rgba(139,74,111,0.05);
-        }
-
-        .form-group textarea { resize: vertical; min-height: 100px; }
-
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        .form-row.full { grid-template-columns: 1fr; }
-
-        .image-upload {
-            border: 2px dashed var(--primary);
-            padding: 2rem;
-            border-radius: 8px;
-            text-align: center;
-            cursor: pointer;
-            background: var(--cream);
-            transition: all 0.3s;
-        }
-
-        .image-upload:hover { background: var(--light-purple); }
-        .image-preview { max-width: 200px; max-height: 200px; margin-top: 1rem; border-radius: 8px; }
-
-        .btn-group { display: flex; gap: 1rem; margin-bottom: 2rem; }
-        .btn-add { background: var(--success); color: white; padding: 1rem 2rem; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; font-size: 1rem; }
-        .btn-add:hover { opacity: 0.9; }
-        .btn-danger { background: var(--danger); color: white; padding: 0.6rem 1.2rem; border: none; border-radius: 5px; cursor: pointer; font-weight: 600; }
-
-        .products-display {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .product-card-admin {
-            background: white;
-            border-radius: 10px;
-            padding: 1.5rem;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .product-card-admin-img {
-            width: 100%;
-            height: 150px;
-            background: var(--light-purple);
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 3rem;
-            margin-bottom: 1rem;
-        }
-
-        .product-card-admin-img img { width: 100%; height: 100%; object-fit: cover; border-radius: 8px; }
-        .product-card-admin h4 { color: var(--primary); margin-bottom: 0.5rem; font-family: 'Playfair Display', serif; }
-        .product-card-admin-price { color: var(--secondary); font-weight: 700; margin-bottom: 1rem; }
-        .product-card-admin-desc { font-size: 0.9rem; color: #666; margin-bottom: 1rem; }
-
-        .alert {
-            padding: 1rem;
-            border-radius: 5px;
-            margin-bottom: 1.5rem;
-            display: none;
-        }
-
-        .alert.show { display: block; }
-        .alert-success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .alert-error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-
-        .login-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .login-modal.show { display: flex; }
-        .login-box {
-            background: white;
-            padding: 3rem;
-            border-radius: 10px;
-            width: 100%;
-            max-width: 400px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-        }
-
-        .login-box h2 { color: var(--primary); margin-bottom: 1rem; text-align: center; }
-        .login-box input { width: 100%; padding: 0.8rem; margin-bottom: 1.5rem; border: 2px solid #ddd; border-radius: 5px; font-size: 1rem; }
-        .login-box button { width: 100%; padding: 0.8rem; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: white; border: none; border-radius: 5px; font-weight: 600; cursor: pointer; }
-
-        .logout-btn { background: rgba(255,255,255,0.2); color: white; border: 2px solid white; padding: 0.6rem 1.5rem; border-radius: 20px; cursor: pointer; font-weight: 600; }
-
-        @media (max-width: 768px) {
-            .hero-content { grid-template-columns: 1fr; }
-            .admin-wrapper { flex-direction: column; }
-            .admin-sidebar { width: 100%; display: flex; overflow-x: auto; }
-            .sidebar-item { white-space: nowrap; flex: 1; }
-            .form-row { grid-template-columns: 1fr; }
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
 </head>
 <body>
     <!-- LOGIN MODAL -->
-    <div id="loginModal" class="login-modal">
-        <div class="login-box">
-            <h2>🍲 Admin Login</h2>
-            <input type="password" id="adminPwd" placeholder="Enter password">
-            <button onclick="loginAdmin()">Login</button>
-            <p style="text-align: center; margin-top: 1rem; color: #999; font-size: 0.9rem;">Password: <strong>admin@2024</strong></p>
+    <div id="loginModal" class="modal">
+        <div class="modal-box">
+            <span class="modal-close" onclick="closeLogin()">&times;</span>
+            <h2 style="color: var(--primary); text-align: center; margin-bottom: 1.5rem;">🍲 Admin Login</h2>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="adminPwd" placeholder="Enter admin password" autofocus>
+            </div>
+            <button class="btn-add" style="width: 100%;" onclick="loginAdmin()">Login</button>
+            <p style="text-align: center; margin-top: 1rem; color: #999; font-size: 0.9rem;">
+                Password: <strong>admin@2024</strong>
+            </p>
         </div>
     </div>
 
-    <!-- CUSTOMER SITE -->
-    <div class="customer-site" id="customerSite">
+    <!-- CUSTOMER WEBSITE -->
+    <div id="customerSite">
         <header>
             <nav>
                 <span class="logo-text">🍲 Homey Bytes</span>
@@ -347,7 +48,7 @@
                     <div class="tagline">Home Made With Love ❤️</div>
                     <p>Authentic vegetarian homemade snacks & sweets. Pure, fresh, and made with traditional recipes.</p>
                     <a href="#products" class="btn btn-primary">Explore Products</a>
-                    <a href="#contact" class="btn btn-secondary" style="margin-left: 1rem;">Order Now</a>
+                    <a href="#contact" class="btn btn-secondary">Order Now</a>
                 </div>
                 <div style="font-size: 12rem; text-align: center;">🍲</div>
             </div>
@@ -385,9 +86,9 @@
     </div>
 
     <!-- ADMIN SITE -->
-    <div class="admin-site" id="adminSite">
+    <div id="adminSite" class="admin-site">
         <div class="admin-header">
-            <h1 style="font-family: 'Playfair Display', serif;">📊 Admin Dashboard</h1>
+            <h1>📊 Admin Dashboard</h1>
             <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
         </div>
 
@@ -406,14 +107,14 @@
                 <!-- DASHBOARD -->
                 <div id="dashboard" class="admin-section active">
                     <h2 class="section-title2">Dashboard</h2>
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem;">
-                        <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <div style="color: #999; margin-bottom: 0.5rem;">Total Products</div>
-                            <div style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--primary); font-weight: 700;" id="totalProducts">0</div>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="dashboard-label">Total Products</div>
+                            <div class="dashboard-value" id="totalProducts">0</div>
                         </div>
-                        <div style="background: white; padding: 2rem; border-radius: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-                            <div style="color: #999; margin-bottom: 0.5rem;">Total Orders</div>
-                            <div style="font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--primary); font-weight: 700;" id="totalOrders">0</div>
+                        <div class="dashboard-card">
+                            <div class="dashboard-label">Total Orders</div>
+                            <div class="dashboard-value" id="totalOrders">0</div>
                         </div>
                     </div>
                 </div>
@@ -459,8 +160,8 @@
                         </div>
 
                         <div class="btn-group">
-                            <button class="btn-add" onclick="addProduct()">✅ Add Product</button>
-                            <button class="btn-danger" onclick="clearForm()">Clear</button>
+                            <button class="btn-add" onclick="addProduct()">✅ Add/Update Product</button>
+                            <button class="btn-danger" onclick="clearProductForm()">Clear</button>
                         </div>
                     </div>
                 </div>
@@ -473,265 +174,74 @@
 
                 <!-- ORDERS -->
                 <div id="orders" class="admin-section">
-                    <h2 class="section-title2">📦 Orders</h2>
-                    <div class="form-box" id="ordersList">
-                        <p style="text-align: center; color: #999;">No orders yet</p>
-                    </div>
+                    <h2 class="section-title2">📦 Orders & Customer Details</h2>
+                    <div id="ordersList"></div>
                 </div>
 
                 <!-- SETTINGS -->
                 <div id="settings" class="admin-section">
                     <h2 class="section-title2">⚙️ Settings</h2>
+                    
                     <div class="form-box">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">🔗 GitHub Sync Setup</h3>
+                        <p style="color: #666; margin-bottom: 1.5rem;">Connect to GitHub to auto-save products & orders to your repository</p>
+                        
                         <div class="form-group">
-                            <label>📞 WhatsApp</label>
-                            <input type="tel" id="sWhatsapp" value="+91 8056580475">
+                            <label>GitHub Username</label>
+                            <input type="text" id="sGithubOwner" placeholder="e.g., yourusername">
                         </div>
                         <div class="form-group">
-                            <label>📧 Email</label>
-                            <input type="email" id="sEmail" value="Lakshsubyam57@gmail.com">
+                            <label>Repository Name</label>
+                            <input type="text" id="sGithubRepo" placeholder="e.g., homey-bytes">
                         </div>
                         <div class="form-group">
-                            <label>☎️ Phone</label>
+                            <label>GitHub Personal Access Token</label>
+                            <input type="password" id="sGithubToken" placeholder="ghp_xxxxx..." style="font-family: monospace;">
+                            <small style="color: #999; display: block; margin-top: 0.5rem;">
+                                📖 <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token" target="_blank" style="color: var(--primary);">How to create a token</a>
+                            </small>
+                        </div>
+                        <button class="btn-add" onclick="setupGitHub()">🔗 Connect GitHub</button>
+                        <button class="btn-danger" onclick="testGitHubConnection()" style="margin-left: 0.5rem;">🧪 Test Connection</button>
+                        <div id="githubStatus" style="margin-top: 1rem; color: #999;"></div>
+                    </div>
+
+                    <div class="form-box">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">📞 Contact Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>WhatsApp</label>
+                                <input type="tel" id="sWhatsapp" value="+91 8056580475">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="sEmail" value="Lakshsubyam57@gmail.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
                             <input type="tel" id="sPhone" value="+91 8056580475">
                         </div>
                         <button class="btn-add" onclick="saveSettings()">💾 Save Settings</button>
                     </div>
 
-                    <h3 style="margin-top: 2rem; color: var(--primary);">💾 Backup</h3>
+                    <h3 style="color: var(--primary); margin-bottom: 1rem; margin-top: 2rem;">💾 Backup</h3>
                     <div class="form-box">
-                        <button class="btn-add" onclick="exportData()" style="background: var(--success);">📥 Export Data</button>
-                        <button class="btn-add" onclick="document.getElementById('importFile').click()" style="background: var(--success); margin-left: 1rem;">📤 Import Data</button>
-                        <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importData(event)">
+                        <div class="btn-group">
+                            <button class="btn-add" onclick="exportData()">📥 Export Data</button>
+                            <button class="btn-add" onclick="document.getElementById('importFile').click()">📤 Import Data</button>
+                            <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importData(event)">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <script>
-        const ADMIN_PASSWORD = 'admin@2024';
-        let products = [
-            { id: 1, name: 'Ragi Mixture', price: 150, desc: 'Nutritious ragi-based savory mixture with aromatic spices', emoji: '🌾', category: 'Mixture', image: null },
-            { id: 2, name: 'Sweet Shankar Poli', price: 80, desc: 'Soft, sweet flatbread filled with jaggery and dry fruits', emoji: '🥟', category: 'Sweet', image: null },
-            { id: 3, name: 'Chakli', price: 100, desc: 'Savory spiral delicacy with cumin and chili flavors', emoji: '🌀', category: 'Savory', image: null },
-            { id: 4, name: 'Fried Makhana', price: 120, desc: 'Crispy, roasted fox nuts with light seasoning', emoji: '🍿', category: 'Snack', image: null },
-        ];
-        let currentImage = null;
-
-        window.addEventListener('load', function() {
-            loadProducts();
-            loadDashboard();
-            if (localStorage.getItem('adminLoggedIn') === 'true') {
-                switchToAdmin();
-            }
-        });
-
-        function showLogin() { document.getElementById('loginModal').classList.add('show'); }
-        function closeLogin() { document.getElementById('loginModal').classList.remove('show'); }
-        
-        function loginAdmin() {
-            const pwd = document.getElementById('adminPwd').value;
-            if (pwd === ADMIN_PASSWORD) {
-                localStorage.setItem('adminLoggedIn', 'true');
-                closeLogin();
-                switchToAdmin();
-            } else {
-                alert('❌ Wrong password!');
-            }
-        }
-
-        function switchToAdmin() {
-            document.getElementById('customerSite').style.display = 'none';
-            document.getElementById('adminSite').style.display = 'block';
-            document.getElementById('adminPwd').value = '';
-        }
-
-        function logoutAdmin() {
-            if (confirm('Logout?')) {
-                localStorage.removeItem('adminLoggedIn');
-                document.getElementById('adminSite').style.display = 'none';
-                document.getElementById('customerSite').style.display = 'block';
-                window.scrollTo(0, 0);
-            }
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
-            if (tabId === 'products') loadProductsList();
-            if (tabId === 'dashboard') loadDashboard();
-        }
-
-        function previewImage(event) {
-            const file = event.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                currentImage = e.target.result;
-                document.getElementById('preview').src = currentImage;
-                document.getElementById('preview').style.display = 'block';
-            };
-            reader.readAsDataURL(file);
-        }
-
-        function addProduct() {
-            const name = document.getElementById('pName').value.trim();
-            const price = document.getElementById('pPrice').value.trim();
-            const desc = document.getElementById('pDesc').value.trim();
-            const emoji = document.getElementById('pEmoji').value.trim() || '🥘';
-            const category = document.getElementById('pCategory').value.trim() || 'Snack';
-
-            if (!name || !price || !desc) {
-                showAlert('❌ Please fill Name, Price, and Description!', 'error');
-                return;
-            }
-
-            products.push({
-                id: Date.now(),
-                name, price: parseInt(price), desc, emoji, category,
-                image: currentImage
-            });
-
-            localStorage.setItem('products', JSON.stringify(products));
-            clearForm();
-            loadProductsList();
-            showAlert('✅ Product added!', 'success');
-        }
-
-        function clearForm() {
-            document.getElementById('pName').value = '';
-            document.getElementById('pPrice').value = '';
-            document.getElementById('pDesc').value = '';
-            document.getElementById('pEmoji').value = '🥘';
-            document.getElementById('pCategory').value = '';
-            document.getElementById('preview').style.display = 'none';
-            document.getElementById('imageFile').value = '';
-            currentImage = null;
-        }
-
-        function loadProductsList() {
-            const list = document.getElementById('productsList');
-            const saved = localStorage.getItem('products');
-            if (saved) products = JSON.parse(saved);
-
-            if (products.length === 0) {
-                list.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: #999;">No products yet</p>';
-                return;
-            }
-
-            list.innerHTML = products.map(p => `
-                <div class="product-card-admin">
-                    <div class="product-card-admin-img">${p.image ? `<img src="${p.image}">` : p.emoji}</div>
-                    <h4>${p.name}</h4>
-                    <div class="product-card-admin-price">₹${p.price}</div>
-                    <div class="product-card-admin-desc">${p.desc}</div>
-                    <button class="btn-danger" onclick="deleteProduct(${p.id})" style="width: 100%;">Delete</button>
-                </div>
-            `).join('');
-        }
-
-        function deleteProduct(id) {
-            if (confirm('Delete this product?')) {
-                products = products.filter(p => p.id !== id);
-                localStorage.setItem('products', JSON.stringify(products));
-                loadProductsList();
-                showAlert('✅ Deleted!', 'success');
-            }
-        }
-
-        function loadDashboard() {
-            const saved = localStorage.getItem('products');
-            if (saved) products = JSON.parse(saved);
-            document.getElementById('totalProducts').textContent = products.length;
-            
-            const orders = JSON.parse(localStorage.getItem('orders') || '[]');
-            document.getElementById('totalOrders').textContent = orders.length;
-        }
-
-        function saveSettings() {
-            const settings = {
-                whatsapp: document.getElementById('sWhatsapp').value,
-                email: document.getElementById('sEmail').value,
-                phone: document.getElementById('sPhone').value
-            };
-            localStorage.setItem('settings', JSON.stringify(settings));
-            showAlert('✅ Settings saved!', 'success');
-        }
-
-        function exportData() {
-            const data = {
-                products,
-                orders: JSON.parse(localStorage.getItem('orders') || '[]'),
-                settings: JSON.parse(localStorage.getItem('settings') || '{}')
-            };
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'homey-bytes-backup.json';
-            a.click();
-            showAlert('✅ Exported!', 'success');
-        }
-
-        function importData(e) {
-            const file = e.target.files[0];
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                try {
-                    const data = JSON.parse(event.target.result);
-                    if (data.products) localStorage.setItem('products', JSON.stringify(data.products));
-                    if (data.orders) localStorage.setItem('orders', JSON.stringify(data.orders));
-                    if (data.settings) localStorage.setItem('settings', JSON.stringify(data.settings));
-                    location.reload();
-                } catch {
-                    showAlert('❌ Invalid file!', 'error');
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        function renderProducts() {
-            const saved = localStorage.getItem('products');
-            if (saved) products = JSON.parse(saved);
-
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = products.map((p, i) => `
-                <div class="product-card" onclick="orderProduct('${p.name}')">
-                    ${p.image ? `<img src="${p.image}" class="product-image">` : `<div class="product-image">${p.emoji}</div>`}
-                    <div class="product-info">
-                        <div class="veg-badge">✓ VEG</div>
-                        <div class="product-name">${p.name}</div>
-                        <div class="product-desc">${p.desc}</div>
-                        <div class="product-footer">
-                            <span class="product-price">₹${p.price}</span>
-                            <button class="order-btn" onclick="event.stopPropagation(); orderProduct('${p.name}')">Order</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
-
-        function orderProduct(name) {
-            const settings = JSON.parse(localStorage.getItem('settings') || '{}');
-            const wa = (settings.whatsapp || '+91 8056580475').replace(/\D/g, '');
-            
-            let orders = JSON.parse(localStorage.getItem('orders') || '[]');
-            orders.push({ id: Date.now(), product: name, timestamp: new Date().toISOString() });
-            localStorage.setItem('orders', JSON.stringify(orders));
-
-            window.open(`https://wa.me/${wa}?text=I want to order ${name}`, '_blank');
-        }
-
-        function showAlert(msg, type) {
-            const alert = document.getElementById('alert');
-            alert.textContent = msg;
-            alert.className = `alert ${type} show`;
-            setTimeout(() => alert.classList.remove('show'), 3000);
-        }
-
-        renderProducts();
-    </script>
+    <!-- SCRIPTS -->
+    <script src="js/github-sync.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/main.js"></script>
 </body>
 </html>
