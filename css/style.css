@@ -567,6 +567,49 @@ footer {
     margin: 0;
 }
 
+/* ORDER HISTORY */
+.order-history-card {
+    background: var(--cream);
+    border: 1px solid var(--light-purple);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.order-history-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.6rem;
+}
+
+.order-history-date {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.order-history-items {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    margin-bottom: 0.6rem;
+}
+
+.order-history-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    font-size: 0.85rem;
+    color: #666;
+    border-top: 1px solid var(--light-purple);
+    padding-top: 0.6rem;
+}
+
+.order-history-footer strong {
+    color: var(--primary);
+    white-space: nowrap;
+}
+
 /* TOAST */
 .toast {
     position: fixed;
