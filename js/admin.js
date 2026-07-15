@@ -88,10 +88,18 @@ function switchTab(tabId) {
         console.log('✅ Section shown:', tabId);
     }
     
-    if (event.target) event.target.classList.add('active');
+    // Highlight the matching sidebar item (works for click or programmatic calls)
+    if (typeof event !== 'undefined' && event && event.target && event.target.classList) {
+        event.target.classList.add('active');
+    } else {
+        document.querySelectorAll('.sidebar-item').forEach(s => {
+            const oc = s.getAttribute('onclick') || '';
+            if (oc.includes(`'${tabId}'`)) s.classList.add('active');
+        });
+    }
 
     // Load content based on tab
-    if (tabId === 'products') {
+    if (tabId === 'productsadmin') {
         console.log('📦 Loading products tab');
         if (typeof loadProducts === 'function') {
             loadProducts();
@@ -142,15 +150,16 @@ function loadOrders() {
                     <thead>
                         <tr>
                             <th>Date & Time</th>
-                            <th>Product</th>
-                            <th>Customer Phone</th>
-                            <th>Email</th>
+                            <th>Customer</th>
+                            <th>Items</th>
+                            <th>Total</th>
+                            <th>Contact & Address</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td colspan="5" style="text-align: center; color: #999; padding: 2rem;">
+                            <td colspan="6" style="text-align: center; color: #999; padding: 2rem;">
                                 ℹ️ No orders yet
                             </td>
                         </tr>
@@ -162,7 +171,7 @@ function loadOrders() {
     }
 
     const sortedOrders = [...orders].reverse();
-    
+
     ordersList.innerHTML = `
         <div style="margin-bottom: 1rem;">
             <button class="btn-danger" onclick="clearAllOrders()">🗑️ Clear All Orders</button>
@@ -172,9 +181,10 @@ function loadOrders() {
                 <thead>
                     <tr>
                         <th>Date & Time</th>
-                        <th>Product</th>
-                        <th>Customer Phone</th>
-                        <th>Email</th>
+                        <th>Customer</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Contact & Address</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -182,9 +192,15 @@ function loadOrders() {
                     ${sortedOrders.map(o => `
                         <tr>
                             <td>${new Date(o.timestamp).toLocaleString()}</td>
-                            <td><strong>${o.product}</strong></td>
-                            <td>${o.phone || '-'}</td>
-                            <td>${o.email || '-'}</td>
+                            <td><strong>${o.customer || o.product || '-'}</strong></td>
+                            <td>${formatOrderItems(o)}</td>
+                            <td><strong>${o.total != null ? '₹' + o.total : '-'}</strong></td>
+                            <td>
+                                ${o.phone ? `📱 ${o.phone}<br>` : ''}
+                                ${o.address ? `📍 ${o.address}<br>` : ''}
+                                ${o.notes ? `📝 ${o.notes}` : ''}
+                                ${(!o.phone && !o.address) ? (o.email || '-') : ''}
+                            </td>
                             <td>
                                 <button class="btn-danger" onclick="deleteOrder(${o.id})" style="padding: 0.4rem 0.8rem; font-size: 0.85rem;">Delete</button>
                             </td>
@@ -194,6 +210,14 @@ function loadOrders() {
             </table>
         </div>
     `;
+}
+
+// Handles both new cart orders (items[]) and legacy single-product orders
+function formatOrderItems(o) {
+    if (Array.isArray(o.items) && o.items.length) {
+        return o.items.map(i => `${i.name} × ${i.qty}`).join('<br>');
+    }
+    return o.product ? `${o.product} × 1` : '-';
 }
 
 function deleteOrder(id) {

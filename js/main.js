@@ -2,7 +2,11 @@
 
 function initWebsite() {
     checkAdminLogin();
+    // loadProducts() lives in products.js — it seeds defaults & backfills fields
     loadProducts();
+    updateProductsOnWebsite();
+    loadCart();
+    updateCartCount();
 }
 
 function checkAdminLogin() {
@@ -12,14 +16,6 @@ function checkAdminLogin() {
         if (customerSite) customerSite.style.display = 'none';
         if (adminSite) adminSite.classList.add('show');
         initAdmin();
-    }
-}
-
-function loadProducts() {
-    const saved = localStorage.getItem('products');
-    if (saved) {
-        products = JSON.parse(saved);
-        updateProductsOnWebsite();
     }
 }
 
