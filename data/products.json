@@ -6,7 +6,9 @@
     "desc": "Nutritious ragi-based savory mixture with aromatic spices",
     "emoji": "🌾",
     "category": "Mixture",
-    "image": null
+    "image": null,
+    "stock": 25,
+    "unit": "250g pack"
   },
   {
     "id": 2,
@@ -15,7 +17,9 @@
     "desc": "Soft sweet flatbread filled with jaggery and dry fruits",
     "emoji": "🥟",
     "category": "Sweet",
-    "image": null
+    "image": null,
+    "stock": 30,
+    "unit": "200g pack"
   },
   {
     "id": 3,
@@ -24,7 +28,9 @@
     "desc": "Savory spiral snack with cumin and chili flavors",
     "emoji": "🌀",
     "category": "Savory",
-    "image": null
+    "image": null,
+    "stock": 40,
+    "unit": "250g pack"
   },
   {
     "id": 4,
@@ -33,6 +39,8 @@
     "desc": "Crispy roasted fox nuts with light seasoning",
     "emoji": "🍿",
     "category": "Snack",
-    "image": null
+    "image": null,
+    "stock": 20,
+    "unit": "150g pack"
   }
 ]
