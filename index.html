@@ -25,6 +25,47 @@
         </div>
     </div>
 
+    <!-- CART & CHECKOUT MODAL -->
+    <div id="cartModal" class="modal">
+        <div class="modal-box cart-box">
+            <span class="modal-close" onclick="closeCart()">&times;</span>
+            <h2 style="color: var(--primary); margin-bottom: 1.5rem;">🛒 Your Cart</h2>
+
+            <div id="cartItems"></div>
+
+            <div id="cartSummary" class="cart-summary" style="display: none;">
+                <span>Total</span>
+                <span id="cartTotal">₹0</span>
+            </div>
+
+            <!-- CHECKOUT DETAILS -->
+            <div id="checkoutForm" class="checkout-form" style="display: none;">
+                <h3 style="color: var(--primary); margin: 1.2rem 0 1rem;">📋 Delivery Details</h3>
+                <div class="form-group">
+                    <label>👤 Full Name *</label>
+                    <input type="text" id="cName" placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label>📱 Phone / WhatsApp *</label>
+                    <input type="tel" id="cPhone" placeholder="e.g., 98765 43210">
+                </div>
+                <div class="form-group">
+                    <label>📍 Delivery Address *</label>
+                    <textarea id="cAddress" placeholder="House no, street, area, city, pincode"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>📝 Notes (optional)</label>
+                    <input type="text" id="cNotes" placeholder="Any special instructions">
+                </div>
+            </div>
+
+            <div id="cartActions" class="cart-actions" style="display: none;">
+                <button class="btn-primary cart-btn" id="checkoutBtn" onclick="proceedToCheckout()">Proceed to Checkout →</button>
+                <button class="btn-primary cart-btn" id="placeOrderBtn" onclick="placeOrder()" style="display: none;">✅ Place Order via WhatsApp</button>
+            </div>
+        </div>
+    </div>
+
     <!-- CUSTOMER WEBSITE -->
     <div id="customerSite">
         <header>
@@ -36,6 +77,7 @@
                         <li><a href="#products">Products</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
+                    <span class="cart-link" onclick="openCart()" title="Cart">🛒<span id="cartCount" class="cart-count">0</span></span>
                     <span class="admin-link" onclick="showLogin()" title="Admin">⚙️</span>
                 </div>
             </nav>
@@ -96,7 +138,7 @@
             <div class="admin-sidebar">
                 <div class="sidebar-item active" onclick="switchTab('dashboard')">📈 Dashboard</div>
                 <div class="sidebar-item" onclick="switchTab('addproduct')">➕ Add Product</div>
-                <div class="sidebar-item" onclick="switchTab('products')">📋 Products</div>
+                <div class="sidebar-item" onclick="switchTab('productsadmin')">📋 Products</div>
                 <div class="sidebar-item" onclick="switchTab('orders')">📦 Orders</div>
                 <div class="sidebar-item" onclick="switchTab('settings')">⚙️ Settings</div>
             </div>
@@ -145,6 +187,17 @@
                             </div>
                         </div>
 
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>📦 Stock Quantity *</label>
+                                <input type="number" id="pStock" placeholder="e.g., 25" min="0" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label>⚖️ Unit / Weight</label>
+                                <input type="text" id="pUnit" placeholder="e.g., 250g pack">
+                            </div>
+                        </div>
+
                         <div class="form-group">
                             <label>📖 Description *</label>
                             <textarea id="pDesc" placeholder="Describe your product in detail..."></textarea>
@@ -167,7 +220,7 @@
                 </div>
 
                 <!-- PRODUCTS LIST -->
-                <div id="products" class="admin-section">
+                <div id="productsadmin" class="admin-section">
                     <h2 class="section-title2">📋 All Products</h2>
                     <div class="products-display" id="productsList"></div>
                 </div>
