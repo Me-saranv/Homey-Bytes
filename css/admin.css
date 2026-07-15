@@ -289,6 +289,57 @@
     gap: 0.5rem;
 }
 
+/* STOCK CONTROLS */
+.stock-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    margin: 0.6rem 0;
+    flex-wrap: wrap;
+}
+
+.stock-badge {
+    font-size: 0.8rem;
+    font-weight: 700;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+}
+
+.stock-ok { background: #d4edda; color: #155724; }
+.stock-low { background: #fff3cd; color: #856404; }
+.stock-out { background: #f8d7da; color: #721c24; }
+
+.stock-stepper {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.stock-stepper button {
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 5px;
+    background: var(--light-purple);
+    color: var(--primary);
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.stock-stepper button:hover { background: var(--primary); color: white; }
+
+.stock-stepper input {
+    width: 52px;
+    padding: 0.3rem;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 5px;
+    font-size: 0.9rem;
+}
+
 /* ORDERS TABLE */
 .orders-table {
     background: white;
