@@ -66,6 +66,15 @@
         </div>
     </div>
 
+    <!-- ORDER HISTORY MODAL -->
+    <div id="orderHistoryModal" class="modal">
+        <div class="modal-box cart-box">
+            <span class="modal-close" onclick="closeOrderHistory()">&times;</span>
+            <h2 style="color: var(--primary); margin-bottom: 1.5rem;">📜 My Order History</h2>
+            <div id="orderHistoryList"></div>
+        </div>
+    </div>
+
     <!-- CUSTOMER WEBSITE -->
     <div id="customerSite">
         <header>
@@ -77,6 +86,7 @@
                         <li><a href="#products">Products</a></li>
                         <li><a href="#contact">Contact</a></li>
                     </ul>
+                    <span class="cart-link" onclick="openOrderHistory()" title="My Orders">📜</span>
                     <span class="cart-link" onclick="openCart()" title="Cart">🛒<span id="cartCount" class="cart-count">0</span></span>
                     <span class="admin-link" onclick="showLogin()" title="Admin">⚙️</span>
                 </div>
