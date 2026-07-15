@@ -1,0 +1,46 @@
+[
+  {
+    "id": 1,
+    "name": "Ragi Mixture",
+    "price": 150,
+    "desc": "Nutritious ragi-based savory mixture with aromatic spices",
+    "emoji": "🌾",
+    "category": "Mixture",
+    "image": null,
+    "stock": 25,
+    "unit": "250g pack"
+  },
+  {
+    "id": 2,
+    "name": "Sweet Shankar Poli",
+    "price": 80,
+    "desc": "Soft sweet flatbread filled with jaggery and dry fruits",
+    "emoji": "🥟",
+    "category": "Sweet",
+    "image": null,
+    "stock": 30,
+    "unit": "200g pack"
+  },
+  {
+    "id": 3,
+    "name": "Chakli",
+    "price": 100,
+    "desc": "Savory spiral snack with cumin and chili flavors",
+    "emoji": "🌀",
+    "category": "Savory",
+    "image": null,
+    "stock": 40,
+    "unit": "250g pack"
+  },
+  {
+    "id": 4,
+    "name": "Fried Makhana",
+    "price": 120,
+    "desc": "Crispy roasted fox nuts with light seasoning",
+    "emoji": "🍿",
+    "category": "Snack",
+    "image": null,
+    "stock": 20,
+    "unit": "150g pack"
+  }
+]

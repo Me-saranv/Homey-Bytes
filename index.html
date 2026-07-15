@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Homey Bytes - Pure Vegetarian Snacks</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <!-- LOGIN MODAL -->
+    <div id="loginModal" class="modal">
+        <div class="modal-box">
+            <span class="modal-close" onclick="closeLogin()">&times;</span>
+            <h2 style="color: var(--primary); text-align: center; margin-bottom: 1.5rem;">🍲 Admin Login</h2>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="adminPwd" placeholder="Enter admin password" autofocus>
+            </div>
+            <button class="btn-add" style="width: 100%;" onclick="loginAdmin()">Login</button>
+            <p style="text-align: center; margin-top: 1rem; color: #999; font-size: 0.9rem;">
+                Password: <strong>admin@2024</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- CART & CHECKOUT MODAL -->
+    <div id="cartModal" class="modal">
+        <div class="modal-box cart-box">
+            <span class="modal-close" onclick="closeCart()">&times;</span>
+            <h2 style="color: var(--primary); margin-bottom: 1.5rem;">🛒 Your Cart</h2>
+
+            <div id="cartItems"></div>
+
+            <div id="cartSummary" class="cart-summary" style="display: none;">
+                <span>Total</span>
+                <span id="cartTotal">₹0</span>
+            </div>
+
+            <!-- CHECKOUT DETAILS -->
+            <div id="checkoutForm" class="checkout-form" style="display: none;">
+                <h3 style="color: var(--primary); margin: 1.2rem 0 1rem;">📋 Delivery Details</h3>
+                <div class="form-group">
+                    <label>👤 Full Name *</label>
+                    <input type="text" id="cName" placeholder="Your name">
+                </div>
+                <div class="form-group">
+                    <label>📱 Phone / WhatsApp *</label>
+                    <input type="tel" id="cPhone" placeholder="e.g., 98765 43210">
+                </div>
+                <div class="form-group">
+                    <label>📍 Delivery Address *</label>
+                    <textarea id="cAddress" placeholder="House no, street, area, city, pincode"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>📝 Notes (optional)</label>
+                    <input type="text" id="cNotes" placeholder="Any special instructions">
+                </div>
+            </div>
+
+            <div id="cartActions" class="cart-actions" style="display: none;">
+                <button class="btn-primary cart-btn" id="checkoutBtn" onclick="proceedToCheckout()">Proceed to Checkout →</button>
+                <button class="btn-primary cart-btn" id="placeOrderBtn" onclick="placeOrder()" style="display: none;">✅ Place Order via WhatsApp</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOMER WEBSITE -->
+    <div id="customerSite">
+        <header>
+            <nav>
+                <span class="logo-text">🍲 Homey Bytes</span>
+                <div style="display: flex; gap: 2rem; align-items: center;">
+                    <ul class="nav-links">
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                    <span class="cart-link" onclick="openCart()" title="Cart">🛒<span id="cartCount" class="cart-count">0</span></span>
+                    <span class="admin-link" onclick="showLogin()" title="Admin">⚙️</span>
+                </div>
+            </nav>
+        </header>
+
+        <section class="hero" id="home">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h1>Homey Bytes</h1>
+                    <div class="tagline">Home Made With Love ❤️</div>
+                    <p>Authentic vegetarian homemade snacks & sweets. Pure, fresh, and made with traditional recipes.</p>
+                    <a href="#products" class="btn btn-primary">Explore Products</a>
+                    <a href="#contact" class="btn btn-secondary">Order Now</a>
+                </div>
+                <div style="font-size: 12rem; text-align: center;">🍲</div>
+            </div>
+        </section>
+
+        <section class="products" id="products">
+            <h2 class="section-title">Our Delicacies</h2>
+            <div class="products-grid" id="productsGrid"></div>
+        </section>
+
+        <section class="contact" id="contact">
+            <div class="contact-content">
+                <h2>Ready to Order?</h2>
+                <p>Get fresh, homemade vegetarian delicacies delivered!</p>
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <div>📱 WhatsApp</div>
+                        <a href="https://wa.me/918056580475" target="_blank">+91 80565 80475</a>
+                    </div>
+                    <div class="contact-method">
+                        <div>📧 Email</div>
+                        <a href="mailto:Lakshsubyam57@gmail.com">Lakshsubyam57@gmail.com</a>
+                    </div>
+                    <div class="contact-method">
+                        <div>☎️ Phone</div>
+                        <a href="tel:+918056580475">+91 80565 80475</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>&copy; 2024 Homey Bytes - 100% Vegetarian. Made with ❤️</p>
+        </footer>
+    </div>
+
+    <!-- ADMIN SITE -->
+    <div id="adminSite" class="admin-site">
+        <div class="admin-header">
+            <h1>📊 Admin Dashboard</h1>
+            <button class="logout-btn" onclick="logoutAdmin()">Logout</button>
+        </div>
+
+        <div class="admin-wrapper">
+            <div class="admin-sidebar">
+                <div class="sidebar-item active" onclick="switchTab('dashboard')">📈 Dashboard</div>
+                <div class="sidebar-item" onclick="switchTab('addproduct')">➕ Add Product</div>
+                <div class="sidebar-item" onclick="switchTab('productsadmin')">📋 Products</div>
+                <div class="sidebar-item" onclick="switchTab('orders')">📦 Orders</div>
+                <div class="sidebar-item" onclick="switchTab('settings')">⚙️ Settings</div>
+            </div>
+
+            <div class="admin-main">
+                <div id="alert" class="alert"></div>
+
+                <!-- DASHBOARD -->
+                <div id="dashboard" class="admin-section active">
+                    <h2 class="section-title2">Dashboard</h2>
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card">
+                            <div class="dashboard-label">Total Products</div>
+                            <div class="dashboard-value" id="totalProducts">0</div>
+                        </div>
+                        <div class="dashboard-card">
+                            <div class="dashboard-label">Total Orders</div>
+                            <div class="dashboard-value" id="totalOrders">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADD PRODUCT -->
+                <div id="addproduct" class="admin-section">
+                    <h2 class="section-title2">➕ Add New Product</h2>
+                    <div class="form-box">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>📝 Product Name *</label>
+                                <input type="text" id="pName" placeholder="e.g., Chakli">
+                            </div>
+                            <div class="form-group">
+                                <label>💰 Price *</label>
+                                <input type="number" id="pPrice" placeholder="e.g., 100" min="0">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>😊 Emoji</label>
+                                <input type="text" id="pEmoji" placeholder="e.g., 🌀" value="🥘" maxlength="2">
+                            </div>
+                            <div class="form-group">
+                                <label>🏷️ Category</label>
+                                <input type="text" id="pCategory" placeholder="e.g., Savory Snack">
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>📦 Stock Quantity *</label>
+                                <input type="number" id="pStock" placeholder="e.g., 25" min="0" value="0">
+                            </div>
+                            <div class="form-group">
+                                <label>⚖️ Unit / Weight</label>
+                                <input type="text" id="pUnit" placeholder="e.g., 250g pack">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>📖 Description *</label>
+                            <textarea id="pDesc" placeholder="Describe your product in detail..."></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>🖼️ Product Image</label>
+                            <div class="image-upload" onclick="document.getElementById('imageFile').click()">
+                                <div>📸 Click to upload image</div>
+                            </div>
+                            <input type="file" id="imageFile" style="display: none;" accept="image/*" onchange="previewImage(event)">
+                            <img id="preview" class="image-preview" style="display: none;">
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn-add" onclick="addProduct()">✅ Add/Update Product</button>
+                            <button class="btn-danger" onclick="clearProductForm()">Clear</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PRODUCTS LIST -->
+                <div id="productsadmin" class="admin-section">
+                    <h2 class="section-title2">📋 All Products</h2>
+                    <div class="products-display" id="productsList"></div>
+                </div>
+
+                <!-- ORDERS -->
+                <div id="orders" class="admin-section">
+                    <h2 class="section-title2">📦 Orders & Customer Details</h2>
+                    <div id="ordersList"></div>
+                </div>
+
+                <!-- SETTINGS -->
+                <div id="settings" class="admin-section">
+                    <h2 class="section-title2">⚙️ Settings</h2>
+                    
+                    <div class="form-box">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">🔗 GitHub Sync Setup</h3>
+                        <p style="color: #666; margin-bottom: 1.5rem;">Connect to GitHub to auto-save products & orders to your repository</p>
+                        
+                        <div class="form-group">
+                            <label>GitHub Username</label>
+                            <input type="text" id="sGithubOwner" placeholder="e.g., yourusername">
+                        </div>
+                        <div class="form-group">
+                            <label>Repository Name</label>
+                            <input type="text" id="sGithubRepo" placeholder="e.g., homey-bytes">
+                        </div>
+                        <div class="form-group">
+                            <label>GitHub Personal Access Token</label>
+                            <input type="password" id="sGithubToken" placeholder="ghp_xxxxx..." style="font-family: monospace;">
+                            <small style="color: #999; display: block; margin-top: 0.5rem;">
+                                📖 <a href="https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token" target="_blank" style="color: var(--primary);">How to create a token</a>
+                            </small>
+                        </div>
+                        <button class="btn-add" onclick="setupGitHub()">🔗 Connect GitHub</button>
+                        <button class="btn-danger" onclick="testGitHubConnection()" style="margin-left: 0.5rem;">🧪 Test Connection</button>
+                        <div id="githubStatus" style="margin-top: 1rem; color: #999;"></div>
+                    </div>
+
+                    <div class="form-box">
+                        <h3 style="color: var(--primary); margin-bottom: 1rem;">📞 Contact Information</h3>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>WhatsApp</label>
+                                <input type="tel" id="sWhatsapp" value="+91 8056580475">
+                            </div>
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" id="sEmail" value="Lakshsubyam57@gmail.com">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Phone</label>
+                            <input type="tel" id="sPhone" value="+91 8056580475">
+                        </div>
+                        <button class="btn-add" onclick="saveSettings()">💾 Save Settings</button>
+                    </div>
+
+                    <h3 style="color: var(--primary); margin-bottom: 1rem; margin-top: 2rem;">💾 Backup</h3>
+                    <div class="form-box">
+                        <div class="btn-group">
+                            <button class="btn-add" onclick="exportData()">📥 Export Data</button>
+                            <button class="btn-add" onclick="document.getElementById('importFile').click()">📤 Import Data</button>
+                            <input type="file" id="importFile" style="display: none;" accept=".json" onchange="importData(event)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script src="js/github-sync.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/admin.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
