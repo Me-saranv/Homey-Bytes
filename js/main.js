@@ -1,9 +1,19 @@
 // Main Website Functions
 
-function initWebsite() {
+async function initWebsite() {
     checkAdminLogin();
-    // loadProducts() lives in products.js — it seeds defaults & backfills fields
-    loadProducts();
+    const isAdmin = localStorage.getItem('adminLoggedIn') === 'true';
+
+    if (isAdmin) {
+        // Admin edits localStorage directly — don't let a background fetch
+        // clobber in-progress changes. loadProducts() lives in products.js.
+        loadProducts();
+    } else {
+        // Shoppers should see the current live stock/products from GitHub,
+        // not just whatever was cached in their browser.
+        await loadLiveProducts();
+    }
+
     updateProductsOnWebsite();
     loadCart();
     updateCartCount();

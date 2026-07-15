@@ -3,6 +3,7 @@
 let products = [];
 let editingProductId = null;
 let currentImage = null;
+let currentImageIsNew = false; // true only when a fresh file was just picked, not on edit-load
 let cart = []; // [{ id, name, price, emoji, image, qty }]
 
 function initProducts() {
@@ -37,6 +38,31 @@ function loadProducts() {
     }
 }
 
+// Called on the customer site so shoppers see the CURRENT stock/products
+// that admin pushed to GitHub, not just whatever is cached in their own
+// browser. Falls back silently to local/default data if the fetch fails
+// (offline, opened via file://, or GitHub Pages hasn't rebuilt yet).
+async function loadLiveProducts() {
+    loadProducts(); // show something immediately while we check for fresher data
+    try {
+        const res = await fetch(`data/products.json?_=${Date.now()}`, { cache: 'no-store' });
+        if (res.ok) {
+            const live = await res.json();
+            if (Array.isArray(live) && live.length) {
+                live.forEach(p => {
+                    if (typeof p.stock !== 'number') p.stock = 0;
+                    if (typeof p.unit !== 'string') p.unit = '';
+                });
+                products = live;
+                localStorage.setItem('products', JSON.stringify(products));
+                console.log('✅ Loaded live products from data/products.json');
+            }
+        }
+    } catch (e) {
+        console.log('ℹ️ Live product fetch unavailable, using cached data:', e.message);
+    }
+}
+
 function getDefaultProducts() {
     return [
         { id: 1, name: 'Ragi Mixture', price: 150, desc: 'Nutritious ragi-based savory mixture with aromatic spices', emoji: '🌾', category: 'Mixture', image: null, stock: 25, unit: '250g pack' },
@@ -66,6 +92,7 @@ function previewImage(event) {
         const reader = new FileReader();
         reader.onload = function(e) {
             currentImage = e.target.result;
+            currentImageIsNew = true;
             const preview = document.getElementById('preview');
             if (preview) {
                 preview.src = currentImage;
@@ -76,7 +103,7 @@ function previewImage(event) {
     }
 }
 
-function addProduct() {
+async function addProduct() {
     const name = document.getElementById('pName')?.value.trim() || '';
     const price = document.getElementById('pPrice')?.value.trim() || '';
     const desc = document.getElementById('pDesc')?.value.trim() || '';
@@ -90,6 +117,24 @@ function addProduct() {
         return;
     }
 
+    // If a new image was picked, upload it to the GitHub repo's images/
+    // folder and store the file path instead of a huge base64 blob.
+    let imageToSave = null;
+    if (currentImage && currentImageIsNew) {
+        if (typeof gitSync !== 'undefined' && gitSync.token) {
+            showAlert('⏳ Uploading image to GitHub images/ folder...', 'success');
+            const uploadedPath = await gitSync.uploadImage(currentImage, name);
+            if (uploadedPath) {
+                imageToSave = uploadedPath;
+            } else {
+                imageToSave = currentImage; // fallback so the image still shows locally
+                showAlert('⚠️ Image upload to GitHub failed — saved locally only for now.', 'error');
+            }
+        } else {
+            imageToSave = currentImage; // GitHub not connected yet — keep local preview
+        }
+    }
+
     if (editingProductId) {
         // Update existing product
         const product = products.find(p => p.id === editingProductId);
@@ -101,7 +146,7 @@ function addProduct() {
             product.category = category;
             product.stock = stock;
             product.unit = unit;
-            if (currentImage) product.image = currentImage;
+            if (imageToSave) product.image = imageToSave;
         }
         editingProductId = null;
         showAlert(`✅ Product "${name}" UPDATED & SYNCED TO GITHUB!`, 'success');
@@ -111,7 +156,7 @@ function addProduct() {
             id: Date.now(),
             name, price: parseInt(price), desc, emoji, category,
             stock, unit,
-            image: currentImage
+            image: imageToSave
         });
         showAlert(`✅ Product "${name}" ADDED & SYNCED TO GITHUB!`, 'success');
     }
@@ -138,6 +183,7 @@ function editProduct(id) {
             preview.src = product.image;
             preview.style.display = 'block';
             currentImage = product.image;
+            currentImageIsNew = false; // existing image — don't re-upload unless a new file is picked
         }
 
         showAlert(`✏️ Editing: "${product.name}" - Make changes & click Update!`, 'success');
@@ -187,6 +233,7 @@ function clearProductForm() {
     if (preview) preview.style.display = 'none';
     document.getElementById('imageFile').value = '';
     currentImage = null;
+    currentImageIsNew = false;
     editingProductId = null;
     showAlert('🧹 Form cleared - Ready for new product!', 'success');
 }
@@ -485,6 +532,54 @@ function placeOrder() {
     saveCart();
     closeCart();
     showToast('✅ Order placed! Complete it on WhatsApp.');
+}
+
+/* ============================================================
+   ORDER HISTORY (customer-facing — orders placed from this browser)
+   ============================================================ */
+
+function openOrderHistory() {
+    renderOrderHistory();
+    document.getElementById('orderHistoryModal').classList.add('show');
+}
+
+function closeOrderHistory() {
+    document.getElementById('orderHistoryModal').classList.remove('show');
+}
+
+function renderOrderHistory() {
+    const list = document.getElementById('orderHistoryList');
+    if (!list) return;
+
+    const orders = JSON.parse(localStorage.getItem('orders') || '[]');
+    const myOrders = orders.filter(o => Array.isArray(o.items) && o.items.length);
+
+    if (myOrders.length === 0) {
+        list.innerHTML = `
+            <div class="cart-empty">
+                <div style="font-size: 3rem;">📜</div>
+                <p style="margin-top: 0.5rem;">No past orders yet</p>
+                <p style="font-size: 0.85rem; color: #999;">Orders you place will show up here</p>
+            </div>`;
+        return;
+    }
+
+    const sorted = [...myOrders].reverse();
+    list.innerHTML = sorted.map(o => `
+        <div class="order-history-card">
+            <div class="order-history-head">
+                <span class="status-badge">🕓 Placed</span>
+                <span class="order-history-date">${new Date(o.timestamp).toLocaleString()}</span>
+            </div>
+            <div class="order-history-items">
+                ${o.items.map(i => `<div>${i.name}${i.unit ? ` (${i.unit})` : ''} × ${i.qty} — ₹${i.price * i.qty}</div>`).join('')}
+            </div>
+            <div class="order-history-footer">
+                <span>📍 ${o.address || '-'}</span>
+                <strong>Total: ₹${o.total}</strong>
+            </div>
+        </div>
+    `).join('');
 }
 
 /* Small toast notification */

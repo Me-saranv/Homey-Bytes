@@ -95,6 +95,62 @@ class GitHubSync {
         }
     }
 
+    // Uploads a product image (base64 data URL) as a real file under images/
+    // in the repo and returns its relative path, e.g. "images/173-chakli.png".
+    // Returns null if not configured or the upload fails.
+    async uploadImage(dataUrl, suggestedName) {
+        if (!this.token || !this.owner || !this.repo) {
+            console.log('GitHub not configured. Image kept as local preview only.');
+            return null;
+        }
+
+        const match = /^data:(image\/[a-zA-Z0-9.+-]+);base64,(.*)$/.exec(dataUrl || '');
+        if (!match) {
+            console.error('uploadImage: not a base64 image data URL');
+            return null;
+        }
+
+        const mime = match[1];
+        const base64Content = match[2];
+        const ext = mime.split('/')[1].replace('jpeg', 'jpg').split('+')[0];
+        const safeName = (suggestedName || 'product')
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/(^-|-$)/g, '') || 'product';
+        const filePath = `images/${Date.now()}-${safeName}.${ext}`;
+
+        try {
+            const response = await fetch(
+                `https://api.github.com/repos/${this.owner}/${this.repo}/contents/${filePath}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': `token ${this.token}`,
+                        'Accept': 'application/vnd.github.v3+json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: `Add product image ${filePath}`,
+                        content: base64Content,
+                        branch: this.branch
+                    })
+                }
+            );
+
+            if (response.ok) {
+                console.log(`✅ Image uploaded to GitHub: ${filePath}`);
+                return filePath;
+            } else {
+                const error = await response.json();
+                console.error('GitHub image upload error:', error);
+                return null;
+            }
+        } catch (error) {
+            console.error('Error uploading image:', error);
+            return null;
+        }
+    }
+
     async syncProducts(products) {
         return await this.updateFile('data/products.json', products);
     }
